@@ -4,11 +4,12 @@ module Chapter3.StepFunctionGraph where
 import ClassyPrelude hiding (Vector, (<.>))
 
 import Control.Lens ((.=))
+import Data.Default (def)
 
 import Graphics.Gnuplot.Simple (Attribute(..), plotFunc)
 
 import Graphics.Rendering.Chart.Easy
-       (layout_margin, line, plot)
+       (AxisFn, LinearAxisParams, laxis_generate, layout_y_axis, line, plot, scaledAxis)
 import Graphics.Rendering.Chart.Gtk (toWindow)
 
 stepFunction :: Double -> Double
@@ -23,9 +24,15 @@ plotStepFunctionChart :: IO ()
 plotStepFunctionChart = do
   let x = [-5.0, -4.9 .. 5.0]
   toWindow 100 200 $ do
-    -- TODO: Figure out how to get a bigger space around axis??
-    layout_margin .= 200
+    layout_y_axis . laxis_generate .= doScale
     plot $ line "hello" [fmapZip stepFunction x]
+
+doScale :: AxisFn Double
+doScale xs =
+  scaledAxis
+    (def :: LinearAxisParams Double)
+    (minimum (impureNonNull xs) - 1 :: Double, maximum (impureNonNull xs) + 1 :: Double)
+    xs
 
 fmapZip :: Functor f => (a -> b) -> f a -> f (a, b)
 fmapZip f xs = fmap (id &&& f) xs

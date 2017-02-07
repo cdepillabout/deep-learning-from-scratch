@@ -21,6 +21,7 @@ library
                      , Chart
                      , Chart-gtk
                      , classy-prelude
+                     , data-default
                      , gnuplot
                      , hmatrix
                      , lens
