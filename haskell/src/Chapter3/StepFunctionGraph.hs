@@ -1,24 +1,32 @@
 
-module Chapter3.StepFunctionGraph where
+module Chapter3.StepFunctionGraph
+  ( module Chapter3.StepFunctionGraph
+  , module Chapter3.StepFunctionGraphPlot
+  ) where
 
 import ClassyPrelude hiding (Vector, (<.>))
 
 import Control.Lens ((.=))
 import Data.Default (def)
-
 import Graphics.Gnuplot.Simple (Attribute(..), plotFunc)
-
 import Graphics.Rendering.Chart.Easy
        (AxisFn, LinearAxisParams, laxis_generate, layout_y_axis, line, plot, scaledAxis)
 import Graphics.Rendering.Chart.Gtk (toWindow)
 
-stepFunction :: Double -> Double
-stepFunction x = if x > 0 then 1 else 0
+import Chapter3.StepFunctionGraphPlot
+
+-------------
+-- gnuplot --
+-------------
 
 plotStepFunctionGnu :: IO ()
 plotStepFunctionGnu = do
   let x = [-5.0, -4.9 .. 5.0]
   plotFunc [YRange (-0.2, 1.2)] x stepFunction
+
+-----------
+-- Chart --
+-----------
 
 plotStepFunctionChart :: IO ()
 plotStepFunctionChart = do
@@ -36,4 +44,3 @@ doScale xs =
 
 fmapZip :: Functor f => (a -> b) -> f a -> f (a, b)
 fmapZip f xs = fmap (id &&& f) xs
-

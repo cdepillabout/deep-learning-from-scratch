@@ -43,6 +43,8 @@ extra-deps:
 - Chart-gtk-1.8.1
 - data-accessor-transformers-0.2.1.7
 - gnuplot-0.5.4.1
+- plot-0.2.3.6
+- plot-gtk-0.2.0.4
 
 # Override default flag values for local packages and extra-deps
 flags: {}
