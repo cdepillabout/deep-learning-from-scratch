@@ -19,7 +19,7 @@ plotSigmoidFunction :: IO ()
 plotSigmoidFunction = do
   let x = [-5.0, -4.9 .. 5.0] :: Vector Double
   toWindow 100 200 $ do
-    layout_y_axis . laxis_generate .= scaleFrom (0) 1
+    layout_y_axis . laxis_generate .= scaleFrom 0 1
     layout_x_axis . laxis_generate .= scaleFrom (-5) 5
     plot $ line "hello" [fmapZip sigmoidFunction $ toList x]
 
@@ -35,4 +35,4 @@ scaleFrom start end =
   scaledAxis (def :: LinearAxisParams Double) (start, end)
 
 fmapZip :: Functor f => (a -> b) -> f a -> f (a, b)
-fmapZip f xs = fmap (id &&& f) xs
+fmapZip f = fmap (id &&& f)
