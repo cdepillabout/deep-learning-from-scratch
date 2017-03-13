@@ -10,18 +10,20 @@ import Graphics.Rendering.Chart.Easy
        (AxisFn, LinearAxisParams, laxis_generate, layout_x_axis,
         layout_y_axis, line, plot, scaledAxis)
 import Graphics.Rendering.Chart.Gtk (toWindow)
-import Numeric.LinearAlgebra (Vector, toList)
+import Numeric.LinearAlgebra (Vector, (<#), (><), toList)
 
-sigmoidFunction :: Double -> Double
+sigmoidFunction :: Floating x => x -> x
 sigmoidFunction x = 1 / (1 + exp (-x))
 
 plotSigmoidFunction :: IO ()
 plotSigmoidFunction = do
   let x = [-5.0, -4.9 .. 5.0] :: Vector Double
+      y = sigmoidFunction x
   toWindow 100 200 $ do
     layout_y_axis . laxis_generate .= scaleFrom 0 1
     layout_x_axis . laxis_generate .= scaleFrom (-5) 5
-    plot $ line "hello" [fmapZip sigmoidFunction $ toList x]
+    -- plot $ line "hello" [fmapZip sigmoidFunction $ toList x]
+    plot $ line "hello" [zip (toList x) (toList y)]
 
 doScale :: AxisFn Double
 doScale xs =
@@ -36,3 +38,6 @@ scaleFrom start end =
 
 fmapZip :: Functor f => (a -> b) -> f a -> f (a, b)
 fmapZip f = fmap (id &&& f)
+
+example :: Vector Double
+example = [1,2] <# (2><3) [1,3,5,2,4,6]
