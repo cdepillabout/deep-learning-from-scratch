@@ -11,7 +11,7 @@ import Graphics.Rendering.Chart.Easy
         layout_y_axis, line, plot, scaledAxis)
 import Graphics.Rendering.Chart.Gtk (toWindow)
 import Numeric.LinearAlgebra
-       (Container, Vector, (<#), (><), sumElements, toList)
+       (Container, Vector, (<#), (><), maxElement, sumElements, toList)
 
 sigmoidFunc :: Floating x => x -> x
 sigmoidFunc x = 1 / (1 + exp (-x))
@@ -50,7 +50,10 @@ example = [1,2] <# (2><3) [1,3,5,2,4,6]
 -- >>> softmax matrix
 -- (1><3)
 --  [ 1.8211...e-2, 0.2451918..., 0.7365969... ]
-softmax :: (Container c e, Floating (c e), Real e) => c e -> c e
-softmax a =
-  let expA = exp a
+softmax
+  :: (Container c Double, Floating (c Double))
+  => c Double -> c Double
+softmax container =
+  let maxInContainer = maxElement container
+      expA = exp (container - realToFrac maxInContainer)
   in expA / realToFrac (sumElements expA)
