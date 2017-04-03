@@ -10,7 +10,8 @@ import Graphics.Rendering.Chart.Easy
        (AxisFn, LinearAxisParams, laxis_generate, layout_x_axis,
         layout_y_axis, line, plot, scaledAxis)
 import Graphics.Rendering.Chart.Gtk (toWindow)
-import Numeric.LinearAlgebra (Vector, (<#), (><), toList)
+import Numeric.LinearAlgebra
+       (Container, Vector, (<#), (><), sumElements, toList)
 
 sigmoidFunc :: Floating x => x -> x
 sigmoidFunc x = 1 / (1 + exp (-x))
@@ -41,3 +42,15 @@ fmapZip f = fmap (id &&& f)
 
 example :: Vector Double
 example = [1,2] <# (2><3) [1,3,5,2,4,6]
+
+-- |
+--
+-- >>> import Numeric.LinearAlgebra (Matrix)
+-- >>> let matrix = (1><3) [0.3, 2.9, 4.0] :: Matrix Double
+-- >>> softmax matrix
+-- (1><3)
+--  [ 1.8211...e-2, 0.2451918..., 0.7365969... ]
+softmax :: (Container c e, Floating (c e), Real e) => c e -> c e
+softmax a =
+  let expA = exp a
+  in expA / realToFrac (sumElements expA)
