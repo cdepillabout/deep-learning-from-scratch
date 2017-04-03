@@ -16,6 +16,7 @@ cabal-version:       >=1.10
 library
   hs-source-dirs:      src
   exposed-modules:     Chapter2.Perceptron
+                     , Chapter3.Example
                      , Chapter3.Lib
                      , Chapter3.StepFunctionGraph
                      , Chapter3.StepFunctionGraphPlot

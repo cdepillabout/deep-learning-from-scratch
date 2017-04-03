@@ -12,17 +12,17 @@ import Graphics.Rendering.Chart.Easy
 import Graphics.Rendering.Chart.Gtk (toWindow)
 import Numeric.LinearAlgebra (Vector, (<#), (><), toList)
 
-sigmoidFunction :: Floating x => x -> x
-sigmoidFunction x = 1 / (1 + exp (-x))
+sigmoidFunc :: Floating x => x -> x
+sigmoidFunc x = 1 / (1 + exp (-x))
 
-plotSigmoidFunction :: IO ()
-plotSigmoidFunction = do
+plotSigmoidFunc :: IO ()
+plotSigmoidFunc = do
   let x = [-5.0, -4.9 .. 5.0] :: Vector Double
-      y = sigmoidFunction x
+      y = sigmoidFunc x
   toWindow 100 200 $ do
     layout_y_axis . laxis_generate .= scaleFrom 0 1
     layout_x_axis . laxis_generate .= scaleFrom (-5) 5
-    -- plot $ line "hello" [fmapZip sigmoidFunction $ toList x]
+    -- plot $ line "hello" [fmapZip sigmoidFunc $ toList x]
     plot $ line "hello" [zip (toList x) (toList y)]
 
 doScale :: AxisFn Double
