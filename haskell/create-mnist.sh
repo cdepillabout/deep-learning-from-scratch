@@ -15,7 +15,6 @@ wget 'https://github.com/oreilly-japan/deep-learning-from-scratch/blob/master/ch
 mkdir -p ch3-sample-weight/
 
 python3 - <<END
-
 import pickle
 import numpy
 import yaml
@@ -30,5 +29,4 @@ for key in network.keys():
     print("write: %(dst)s" % locals())
     with open(dst, 'w') as f:
         f.write(yaml.dump(network[key].tolist()))
-
 END
