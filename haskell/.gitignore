@@ -16,3 +16,6 @@ cabal.sandbox.config
 *.hp
 *.eventlog
 .stack-work/
+
+# Training data files for MNIST
+mnist/
