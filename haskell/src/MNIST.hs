@@ -1,16 +1,17 @@
 
 module MNIST where
 
-import Prelude hiding (dropWhile)
+import Prelude hiding (drop, dropWhile, readFile)
 
 import Conduit
        (Consumer, Producer, (=$=), ($$), await, concatC, dropC, printC, mapC,
         sinkVector, sourceFile)
 import Control.Monad (void)
 import Control.Monad.Trans.Resource (MonadResource, runResourceT)
-import Data.ByteString (ByteString)
+import Data.ByteString (ByteString, drop, readFile)
 import Data.Word (Word8)
 import Numeric.LinearAlgebra (Vector)
+import Numeric.LinearAlgebra.Devel (fromByteString)
 import System.FilePath ((</>))
 
 trainImgPath :: FilePath
@@ -28,29 +29,15 @@ testLabelPath = "mnist" </> "t10k-labels-idx1-ubyte"
 loadMNIST :: IO (Vector Word8, Vector Word8, Vector Word8, Vector Word8)
 loadMNIST = do
   trainImg <- loadImg trainImgPath
+  trainLabel <- loadLabel trainLabelPath
   testImg <- loadImg testImgPath
-  pure (trainImg, [], testImg, [])
-
--- TODO: Maybe this would be safer if I used Numeric.LinearAlgebra.fromByteString??
+  testLabel <- loadLabel testLabelPath
+  pure (trainImg, trainLabel, testImg, testLabel)
 
 loadImg :: FilePath -> IO (Vector Word8)
 loadImg filePath =
-  runResourceT $
-     source =$= concatC $$ dropC 16 >> sinkVector
-  where
-    source :: MonadResource m => Producer m ByteString
-    source = sourceFile filePath
+  fromByteString . drop 16 <$> readFile filePath
 
-loadImg' :: FilePath -> IO ()
-loadImg' filePath =
-  void $ runResourceT $
-     -- source =$= concatC $$ dropC 16 >> sinkVector
-     source =$= concatC $$ loop
-  where
-    source :: MonadResource m => Producer m ByteString
-    source = sourceFile filePath
-
-    loop :: Monad m => Consumer a m ()
-    loop = await >>= \case
-      Nothing -> pure ()
-      Just _ -> loop
+loadLabel :: FilePath -> IO (Vector Word8)
+loadLabel filePath =
+  fromByteString . drop 8 <$> readFile filePath
