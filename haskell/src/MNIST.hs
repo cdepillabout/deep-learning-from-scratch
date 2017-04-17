@@ -29,15 +29,15 @@ testLabelPath = "mnist" </> "t10k-labels-idx1-ubyte"
 -- MNIST Data Type --
 ---------------------
 
-data MNIST a = MNIST
+data MNISTContainer a = MNIST
   { trainImg :: !a
   , trainLabel :: !(Vector Word8)
   , testImg :: !a
   , testLabel :: !(Vector Word8)
-  }
+  } deriving (Eq, Read, Show)
 
-instance Functor MNIST where
-  fmap :: (a -> b) -> MNIST a -> MNIST b
+instance Functor MNISTContainer where
+  fmap :: (a -> b) -> MNISTContainer a -> MNISTContainer b
   fmap f mnist =
     MNIST
     { trainImg = f $ trainImg mnist
@@ -46,34 +46,42 @@ instance Functor MNIST where
     , testLabel = testLabel mnist
     }
 
-type RawMNIST = MNIST (Matrix Word8)
+type RawMNIST = MNISTContainer (Vector Word8)
 
-type NormalMNIST = MNIST (Matrix Double)
+type DoubleMNIST = MNISTContainer (Vector Double)
 
-normalize :: RawMNIST -> NormalMNIST
-normalize = fmap (undefined {- cmap f -})
+type MNIST = MNISTContainer (Matrix Double)
+
+normalize :: MNIST -> MNIST
+normalize = fmap (cmap f)
   where
-    f :: Word8 -> Double
-    f byte = fromIntegral byte / 255
+    f :: Double -> Double
+    f byte = byte / 255
+
+doubleize :: RawMNIST -> DoubleMNIST
+doubleize = fmap (map fromIntegral)
 
 -------------------
 -- Loading MNIST --
 -------------------
 
-loadMNIST :: IO RawMNIST
-loadMNIST = do
+loadMNISTRaw :: IO RawMNIST
+loadMNISTRaw = do
   trainImg <- loadImg trainImgPath
   trainLabel <- loadLabel trainLabelPath
   testImg <- loadImg testImgPath
   testLabel <- loadLabel testLabelPath
   pure MNIST{..}
 
-loadNormalizedMNIST :: IO NormalMNIST
+loadMNIST :: IO MNIST
+loadMNIST = fmap (reshape imgSize) . doubleize <$> loadMNISTRaw
+
+loadNormalizedMNIST :: IO MNIST
 loadNormalizedMNIST = normalize <$> loadMNIST
 
-loadImg :: FilePath -> IO (Matrix Word8)
+loadImg :: FilePath -> IO (Vector Word8)
 loadImg filePath =
-  reshape imgSize . fromByteString . drop 16 <$> readFile filePath
+  fromByteString . drop 16 <$> readFile filePath
 
 loadLabel :: FilePath -> IO (Vector Word8)
 loadLabel filePath =
