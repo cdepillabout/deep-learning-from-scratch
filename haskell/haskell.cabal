@@ -38,6 +38,7 @@ library
                      , plot
                      , plot-gtk
                      , resourcet
+                     , vector
   default-language:    Haskell2010
   ghc-options:         -Wall -fwarn-incomplete-uni-patterns -fwarn-incomplete-record-updates -fwarn-monomorphism-restriction
   default-extensions:  ConstraintKinds
