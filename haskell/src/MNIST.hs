@@ -73,9 +73,11 @@ loadMNISTRaw = do
   testLabel <- loadLabel testLabelPath
   pure MNIST{..}
 
+-- | This is a non-normalized, flattened MNIST, with one_hot_label = false.
 loadMNIST :: IO MNIST
 loadMNIST = fmap (reshape imgSize) . doubleize <$> loadMNISTRaw
 
+-- | This is a Normalized, flattened MNIST, with one_hot_label = false.
 loadNormalizedMNIST :: IO MNIST
 loadNormalizedMNIST = normalize <$> loadMNIST
 
