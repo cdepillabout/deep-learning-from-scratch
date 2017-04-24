@@ -55,13 +55,7 @@ load = (,,) <$> loadNormalizedMNIST <*> loadWs <*> loadBs
 
 predict :: Ws -> Bs -> Vector Double -> Matrix Double
 predict (Ws w1 w2 w3) (Bs b1 b2 b3) x =
-  let -- w1 = (2><3) [0.1, 0.3, 0.5, 0.2, 0.4, 0.6]
-      -- b1 = (1><3) [0.1, 0.2, 0.3]
-      -- w2 = (3><2) [0.1, 0.4, 0.2, 0.5, 0.3, 0.6]
-      -- b2 = (1><2) [0.1, 0.2]
-      -- w3 = (2><2) [0.1, 0.3, 0.2, 0.4]
-      -- b3 = (1><2) [0.1, 0.2]
-      x' = asRow x
+  let x' = asRow x
       a1 = (x' <> w1) + b1
       z1 = sigmoidFunc a1
       a2 = (z1 <> w2) + b2
@@ -86,7 +80,7 @@ runNeuralnetMNIST = do
       let y = predict ws bs img
           (_, maxIdx) = maxIndex y
           lbl = fromIntegral label
-      putStrLn $ show i <> ": maxIdx = " <> show maxIdx <> ", lbl = " <> show lbl
+      -- putStrLn $ show i <> ": maxIdx = " <> show maxIdx <> ", lbl = " <> show lbl
       pure (maxIdx, lbl, maxIdx == lbl)
 
     process :: [(a, b, Bool)] -> (Int, Int)
