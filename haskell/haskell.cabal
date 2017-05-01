@@ -18,6 +18,7 @@ library
   exposed-modules:     Chapter2.Perceptron
                      , Chapter3.Example
                      , Chapter3.Lib
+                     , Chapter3.NeuralnetBatchMNIST
                      , Chapter3.NeuralnetMNIST
                      , Chapter3.StepFunctionGraph
                      , Chapter3.StepFunctionGraphPlot
