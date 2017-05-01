@@ -8,7 +8,7 @@ import Data.Traversable (forM)
 import Data.Word (Word8)
 import Data.Yaml (decodeFile)
 import Numeric.LinearAlgebra
-       (Matrix, Vector, asRow, fromList, fromLists, maxIndex, toList, toRows)
+       (Matrix, Vector, asRow, fromLists, maxIndex, toList, toRows)
 import System.FilePath ((</>))
 
 import Chapter3.Lib (sigmoidFunc, softmax)
