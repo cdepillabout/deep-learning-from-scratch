@@ -39,7 +39,7 @@ runNeuralnetBatchMNIST = do
     f :: Ws -> Bs -> ((Matrix Double, Vector Word8), Int) -> IO ([Int], [Int], [Bool])
     f ws bs ((imgs, labels), i) = do
       let ys = predict ws bs imgs :: Matrix Double
-          maxIdxes = fmap maxIndex $ (toRows ys :: [Vector Double]) :: [Int]
+          maxIdxes = fmap maxIndex $ toRows ys :: [Int]
           lbls = fmap fromIntegral $ toList labels :: [Int]
       -- putStrLn $
       --   "\n\n" <>
