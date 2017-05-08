@@ -83,7 +83,7 @@ indicies :: (Enum a, Num a) => [a]
 indicies = [0, batchSize .. (10000 - batchSize)]
 
 batchSize :: Num a => a
-batchSize = 100
+batchSize = 5000
 
 imgColumnSize :: Num a => a
 imgColumnSize = 784
